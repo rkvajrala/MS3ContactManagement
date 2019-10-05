@@ -1,0 +1,109 @@
+#%RAML 1.0
+version: 1.0
+title: contact-api
+types:
+  contact: !include contact-datatype.raml
+  contact_no_id: !include contact-no-id-datatype.raml
+
+/contact:
+  get:
+    responses:
+        200:
+          body:
+            application/json:
+              type: contact[]
+              examples:
+                output: !include examples/contact-examples.raml
+        404:
+          body:
+            application/json:
+              example:
+                message: Service not found
+        500:
+          body:
+            application/json:
+              example:
+                message: Internal Server error
+  post:
+    body:
+      application/json:
+        type: contact_no_id
+        examples:
+          input:  !include examples/contact-no-id-example.raml
+    responses:
+      201:
+        body:
+          application/json:
+            type: contact
+            examples:
+              output : !include examples/contact-example.raml
+      404:
+          body:
+            application/json:
+              example:
+                message: Service not found
+      500:
+          body:
+            application/json:
+              example:
+                message: Internal Server error
+
+  patch:
+    body:
+      application/json:
+        type: contact
+        examples:
+          input:  !include examples/contact-example.raml
+    responses:
+      201:
+        body:
+          application/json:
+            type: contact
+            examples:
+              output : !include examples/contact-example.raml
+      404:
+          body:
+            application/json:
+              example:
+                message: Service not found
+      500:
+          body:
+            application/json:
+              example:
+                message: Internal Server error
+  /{ID}:
+    get:
+      responses:
+        200:
+          body:
+            application/json:
+              type: contact
+              examples:
+                output: !include examples/contact-example.raml
+        404:
+          body:
+            application/json:
+              example:
+                message: Service not found
+        500:
+          body:
+            application/json:
+              example:
+                message: Internal Server error      
+    delete:
+      responses:
+        201:
+          body:
+            application/json:
+              example:
+                message: contact deleted successfully
+        404:
+          body:
+            application/json:
+              example:
+                message: Service not found
+        500:
+          body:
+            application/json:
+              example:
+                message: Internal Server error
