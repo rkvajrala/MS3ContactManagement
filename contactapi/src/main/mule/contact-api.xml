@@ -122,93 +122,18 @@ output application/json
         </error-handler>
     </flow>
     <flow name="delete:\contact\(ID):contact-api-config">
-        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core">
-            <ee:variables>
-                <ee:set-variable variableName="ID">attributes.uriParams.ID</ee:set-variable>
-            </ee:variables>
-        </ee:transform>
-        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{
-  message: "contact deleted successfully"
-}]]></ee:set-payload>
-            </ee:message>
-        </ee:transform>
+		<flow-ref doc:name="Flow Reference" doc:id="8acc7651-be9a-428d-b004-7ea19ab83e6c" name="delete_contact_flow"/>
     </flow>
     <flow name="patch:\contact:application\json:contact-api-config">
-        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{
-  id: 1,
-  "type": "email",
-  value: "rkvajrala@gmail.com",
-  preferred: true
-}]]></ee:set-payload>
-            </ee:message>
-        </ee:transform>
+		<flow-ref doc:name="Flow Reference" doc:id="345e9a25-bc0b-472d-9b5c-abb1f6d1372e" name="patch_update_contact_flow"/>
     </flow>
     <flow name="get:\contact:contact-api-config">
-        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-[
-  {
-    id: 1,
-    "type": "email",
-    value: "rkvajrala@gmail.com",
-    preferred: true
-  }, 
-  {
-    id: 1,
-    "type": "email",
-    value: "rkvajrala@gmail.com",
-    preferred: true
-  }
-]]]></ee:set-payload>
-            </ee:message>
-        </ee:transform>
+		<flow-ref doc:name="Flow Reference" doc:id="098371bc-cad3-4306-b506-ccdffb1c5278" name="get_all_contacts_flow"/>
     </flow>
     <flow name="get:\contact\(ID):contact-api-config">
-        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core">
-            <ee:variables>
-                <ee:set-variable variableName="ID">attributes.uriParams.ID</ee:set-variable>
-            </ee:variables>
-        </ee:transform>
-        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{
-  id: 1,
-  "type": "email",
-  value: "rkvajrala@gmail.com",
-  preferred: true
-}]]></ee:set-payload>
-            </ee:message>
-        </ee:transform>
+		<flow-ref doc:name="Flow Reference" doc:id="09b16b25-c468-4395-861d-acaede344003" name="get_contacts_by_id_flow"/>
     </flow>
     <flow name="post:\contact:application\json:contact-api-config">
-        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{
-  id: 1,
-  "type": "email",
-  value: "rkvajrala@gmail.com",
-  preferred: true
-}]]></ee:set-payload>
-            </ee:message>
-        </ee:transform>
+		<flow-ref doc:name="Flow Reference" doc:id="0ee231c7-cd88-441c-9ff8-ab2f00ac0f64" name="post_add_new_contact_flow"/>
     </flow>
 </mule>

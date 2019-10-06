@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<db:config name="Database_Config" doc:name="Database Config" doc:id="358bd08e-2483-4e0f-b01a-c258b2db1d5f" >
+		<db:mssql-connection host="DESKTOP-BSJOOPT" user="sa" password="Anirudh16" databaseName="ContactsDB" />
+	</db:config>
+	<flow name="post_add_new_address_flow" doc:id="c02593e9-0e86-43a1-b656-fb982b379f79" >
+		<db:insert doc:name="Insert" doc:id="3c9751b5-8ce0-4c1f-a285-b3ad9257af29" config-ref="Database_Config" autoGenerateKeys="true" target="result" targetValue="#[message]">
+			<db:sql >INSERT INTO [dbo].[ADDRESS](NUMBER,STREET,UNIT,CITY,STATE,ZIPCODE)VALUES(:number,:street,:unit,:city,:state,:zipcode)</db:sql>
+			<db:input-parameters ><![CDATA[#[{'number':payload.number,'street':payload.street,'unit':payload.unit,'city':payload.city,'state':payload.state,'zipcode':payload.zip}]]]></db:input-parameters>
+		</db:insert>
+		<ee:transform doc:name="Transform Message" doc:id="5075a853-d06b-4700-b7c2-51a6b3cc5370" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+ id : vars.result.payload.generatedKeys[0],
+ number : payload.number,
+ street : payload.street,
+ unit: payload.unit,
+ city: payload.city,
+ state: payload.state,
+ zip:payload.zip
+ }]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="get_all_addresses_flow" doc:id="ac81741c-1be3-42ee-8561-ba1df80b9434" >
+		<db:select doc:name="Select" doc:id="b03212c9-5417-4c8d-a29a-71031a93243e" config-ref="Database_Config">
+			<db:sql >select * from dbo.address</db:sql>
+		</db:select>
+		<ee:transform doc:name="Transform Message" doc:id="dfcf23aa-5fb1-4d9f-a231-eafca48adefd" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload map {
+
+ id : $.ADDRESS_ID,
+ number : $.NUMBER,
+ street : $.STREET,
+ unit: $.UNIT,
+ city: $.CITY,
+ state: $.STATE,
+ zip:$.ZIPCODE
+ 
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="get_address_by_id_flow" doc:id="1725965d-47c1-4843-940b-6f708f9cd27d" >
+		<db:select doc:name="Select" doc:id="c97eae35-747f-4711-879f-253167c5a0a0" config-ref="Database_Config">
+			<db:sql >select * from address where ADDRESS_ID =:ID</db:sql>
+			<db:input-parameters ><![CDATA[#[{'ID' : attributes.uriParams.ID}]]]></db:input-parameters>
+		</db:select>
+		<ee:transform doc:name="Transform Message" doc:id="5ff62aa0-937a-4a7a-9f28-75dabfe20c9e" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload map {
+
+ id : $.ADDRESS_ID,
+ number : $.NUMBER,
+ street : $.STREET,
+ unit: $.UNIT,
+ city: $.CITY,
+ state: $.STATE,
+ zip:$.ZIPCODE
+ 
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="patch_address_by_id_flow" doc:id="bbbe4877-327e-4a33-9d11-bf80660f1fd8" >
+		<db:update doc:name="Update" doc:id="367e0dc0-798c-4460-8696-77174fab7758" config-ref="Database_Config" target="result" targetValue="#[message]">
+			<db:sql >UPDATE [dbo].[ADDRESS]
+SET 
+NUMBER = :number,
+STREET = :street,
+UNIT = :unit,
+CITY = :city,
+STATE = :state,
+ZIPCODE = :zipcode
+Where ADDRESS_ID = :ID
+</db:sql>
+			<db:input-parameters ><![CDATA[#[{'ID':payload.id,'number':payload.number,'street':payload.street,'unit':payload.unit,'city':payload.city,'state':payload.state,'zipcode':payload.zip}]]]></db:input-parameters>
+		</db:update>
+		<ee:transform doc:name="Transform Message" doc:id="23539998-61d8-4464-a5fa-eab0189e1859" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="delete_address_by_id_flow" doc:id="052b7a0d-27a4-4b0c-b451-d2431a59f396" >
+		<db:delete doc:name="Delete" doc:id="2767813f-f0dd-494a-a3d6-0661ae1835a2" config-ref="Database_Config">
+			<db:sql >Delete from address where address_id =:ID</db:sql>
+			<db:input-parameters ><![CDATA[#[{'ID' : attributes.uriParams.ID}]]]></db:input-parameters>
+		</db:delete>
+		<ee:transform doc:name="Transform Message" doc:id="f17a159e-3634-4c06-b105-6b3217fa1d6c" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"message" : "Address deleted successfully"
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>

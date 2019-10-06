@@ -122,119 +122,18 @@ output application/json
         </error-handler>
     </flow>
     <flow name="delete:\member\(ID):member-api-config">
-        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core">
-            <ee:variables>
-                <ee:set-variable variableName="ID">attributes.uriParams.ID</ee:set-variable>
-            </ee:variables>
-        </ee:transform>
-        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{
-  message: "Member deleted successfully"
-}]]></ee:set-payload>
-            </ee:message>
-        </ee:transform>
+		<flow-ref doc:name="Flow Reference" doc:id="123b2997-9956-4d06-af79-8972391df50e" name="delete_member_implementationFlow"/>
     </flow>
     <flow name="patch:\member:application\json:member-api-config">
-        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{
-  id: 1,
-  first_name: "Ramakrishna",
-  last_name: "Vajrala",
-  date_birth: "2015-05-23",
-  gender: "Male",
-  role: "Developer"
-}]]></ee:set-payload>
-            </ee:message>
-        </ee:transform>
+		<flow-ref doc:name="Flow Reference" doc:id="5dc8e550-5745-4995-a7c5-fbb4adf56308" name="patch_update_member_implementation"/>
     </flow>
     <flow name="get:\member:member-api-config">
-        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="1b13159f-b452-4cf8-a031-2b12a72bab6b">
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-[
-  {
-    id: 1,
-    first_name: "Ramakrishna",
-    last_name: "Vajrala",
-    date_birth: "2015-05-23",
-    gender: "Male",
-    role: "Developer"
-  }, 
-  {
-    id: 2,
-    first_name: "Sirisha",
-    last_name: "Ponnada",
-    date_birth: "2015-05-23",
-    gender: "Female",
-    role: "Developer"
-  }, 
-  {
-    id: 3,
-    first_name: "Anirudh",
-    last_name: "Vajrala",
-    date_birth: "2015-05-23",
-    gender: "Male",
-    role: "Program Director"
-  }, 
-  {
-    id: 4,
-    first_name: "Akhilesh",
-    last_name: "Vajrala",
-    date_birth: "2015-05-23",
-    gender: "Female",
-    role: "Program Director"
-  }
-]]]></ee:set-payload>
-            </ee:message>
-        </ee:transform>
+		<flow-ref doc:name="Flow Reference" doc:id="5dea3b6d-060e-4236-82e3-92e4dd6e12b5" name="get_all_members_implementation"/>
     </flow>
     <flow name="get:\member\(ID):member-api-config">
-        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" doc:id="c392197d-3e30-4e53-9d02-90ce682de26f">
-            <ee:variables>
-                <ee:set-variable variableName="ID"><![CDATA[attributes.uriParams.ID]]></ee:set-variable>
-            </ee:variables>
-        </ee:transform>
-        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{
-  id: 1,
-  first_name: "Ramakrishna",
-  last_name: "Vajrala",
-  date_birth: "2015-05-23",
-  gender: "Male",
-  role: "Developer"
-}]]></ee:set-payload>
-            </ee:message>
-        </ee:transform>
+		<flow-ref doc:name="Flow Reference" doc:id="ada2340a-96aa-433d-8e58-009219953192" name="get_membersby_id_implementation"/>
     </flow>
     <flow name="post:\member:application\json:member-api-config">
-        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="d2dbfbb2-d3f1-4de3-936f-105c44ab3095">
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{
-  id: 1,
-  first_name: "Ramakrishna",
-  last_name: "Vajrala",
-  date_birth: "2015-05-23",
-  gender: "Male",
-  role: "Developer"
-}]]></ee:set-payload>
-            </ee:message>
-        </ee:transform>
+		<flow-ref doc:name="Flow Reference" doc:id="3d85ec04-7bee-48d0-a95a-50ba6393cc9a" name="post_implementation_flow"/>
     </flow>
 </mule>

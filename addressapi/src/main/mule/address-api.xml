@@ -122,126 +122,18 @@ output application/json
         </error-handler>
     </flow>
     <flow name="delete:\address\(ID):address-api-config">
-        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core">
-            <ee:variables>
-                <ee:set-variable variableName="ID">attributes.uriParams.ID</ee:set-variable>
-            </ee:variables>
-        </ee:transform>
-        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{
-  message: "address deleted successfully"
-}]]></ee:set-payload>
-            </ee:message>
-        </ee:transform>
+		<flow-ref doc:name="Flow Reference" doc:id="b243a6f0-0743-47a1-bb54-35e97cd714ee" name="delete_address_by_id_flow"/>
     </flow>
     <flow name="patch:\address:application\json:address-api-config">
-        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{
-  id: 1,
-  number: "3445",
-  street: "Rialto pl",
-  unit: "100",
-  city: "Alpharetta",
-  state: "GA",
-  zip: "30022"
-}]]></ee:set-payload>
-            </ee:message>
-        </ee:transform>
+ 		<flow-ref doc:name="Flow Reference" doc:id="77adf86e-cd17-45eb-97af-c8f349282240" name="patch_address_by_id_flow"/>
     </flow>
     <flow name="get:\address:address-api-config">
-        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-[
-  {
-    id: 1,
-    number: "3445",
-    street: "Rialto pl",
-    unit: "100",
-    city: "Alpharetta",
-    state: "GA",
-    zip: "30022"
-  }, 
-  {
-    id: 2,
-    number: "3445",
-    street: "Rialto pl",
-    unit: "100",
-    city: "Alpharetta",
-    state: "GA",
-    zip: "30022"
-  }, 
-  {
-    id: 3,
-    number: "3445",
-    street: "Rialto pl",
-    unit: "100",
-    city: "Alpharetta",
-    state: "GA",
-    zip: "30022"
-  }, 
-  {
-    id: 4,
-    number: "3445",
-    street: "Rialto pl",
-    unit: "100",
-    city: "Alpharetta",
-    state: "GA",
-    zip: "30022"
-  }
-]]]></ee:set-payload>
-            </ee:message>
-        </ee:transform>
+		<flow-ref doc:name="Flow Reference" doc:id="6112dc43-ce46-4588-8dac-1a560808bb45" name="get_all_addresses_flow"/>
     </flow>
     <flow name="get:\address\(ID):address-api-config">
-        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core">
-            <ee:variables>
-                <ee:set-variable variableName="ID">attributes.uriParams.ID</ee:set-variable>
-            </ee:variables>
-        </ee:transform>
-        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{
-  id: 1,
-  number: "3445",
-  street: "Rialto pl",
-  unit: "100",
-  city: "Alpharetta",
-  state: "GA",
-  zip: "30022"
-}]]></ee:set-payload>
-            </ee:message>
-        </ee:transform>
+        <flow-ref doc:name="Flow Reference" doc:id="b23e7bd6-77a6-4f26-98b2-aa8520b057d3" name="get:\address\(ID):address-api-config"/>
     </flow>
     <flow name="post:\address:application\json:address-api-config">
-        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{
-  id: 1,
-  number: "3445",
-  street: "Rialto pl",
-  unit: "100",
-  city: "Alpharetta",
-  state: "GA",
-  zip: "30022"
-}]]></ee:set-payload>
-            </ee:message>
-        </ee:transform>
+        <flow-ref doc:name="Flow Reference" doc:id="ee438704-82c5-410a-8f45-ade6b30a8429" name="post_add_new_address_flow"/>
     </flow>
 </mule>
