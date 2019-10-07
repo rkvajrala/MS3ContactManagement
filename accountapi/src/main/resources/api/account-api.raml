@@ -1,0 +1,93 @@
+#%RAML 1.0
+baseUri: https://anypoint.mulesoft.com/mocking/api/v1/links/fa1f9a20-8fb2-4604-81a1-a30102ee46e0/ # 
+version: 1.0
+title: Account 
+
+
+/account:
+  get:
+    responses:
+        200:
+          body:
+            application/json:
+              
+        404:
+          body:
+            application/json:
+              example:
+                message: Service not found
+        500:
+          body:
+            application/json:
+              example:
+                message: Internal Server error
+  post:
+    body:
+      application/json:
+    responses:
+      201:
+        body:
+          application/json:
+      404:
+          body:
+            application/json:
+              example:
+                message: Service not found
+      500:
+          body:
+            application/json:
+              example:
+                message: Internal Server error
+
+  patch:
+    body:
+      application/json:
+
+    responses:
+      201:
+        body:
+          application/json:
+
+      404:
+          body:
+            application/json:
+              example:
+                message: Service not found
+      500:
+          body:
+            application/json:
+              example:
+                message: Internal Server error
+  /{ID}:
+    get:
+      responses:
+        200:
+          body:
+            application/json:
+        404:
+          body:
+            application/json:
+              example:
+                message: Service not found
+        500:
+          body:
+            application/json:
+              example:
+                message: Internal Server error      
+    delete:
+      responses:
+        201:
+          body:
+            application/json:
+              example:
+                message: account deleted successfully
+        404:
+          body:
+            application/json:
+              example:
+                message: Service not found
+        500:
+          body:
+            application/json:
+              example:
+                message: Internal Server error

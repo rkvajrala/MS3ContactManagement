@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<db:config name="Database_Config" doc:name="Database Config" doc:id="1dfe19ef-b556-4f90-b90a-ac0d960e8ecb" >
+		<db:mssql-connection host="DESKTOP-BSJOOPT" user="sa" password="Anirudh16" databaseName="contactsdb" />
+	</db:config>
+	<flow name="post_insert_memberaddress_flow" doc:id="a2f575e4-6096-46b1-a787-0fa1ae77c986" >
+		<db:insert doc:name="Insert" doc:id="bbf7e64b-9338-4a0d-ac8e-6ff2e40f41e1" config-ref="Database_Config" autoGenerateKeys="true" target="result" targetValue="#[message]">
+			<db:sql >INSERT MEMBER_ADDRESS(MEMBER_ID,ADDRESS_ID)VALUES(:member_id,:address_id)</db:sql>
+			<db:input-parameters ><![CDATA[#[{'member_id':payload.account_id,'address_id':payload.address_id}]]]></db:input-parameters>
+		</db:insert>
+		<ee:transform doc:name="Transform Message" doc:id="0063ce05-d1f9-42c4-868d-8319491e8e2f" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"member_address_id" : vars.result.payload.generatedKeys[0]
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="delete_memberaddress_flow" doc:id="f64ffe0a-6483-4c6f-8bab-b15b95d881d7" >
+		<db:delete doc:name="Delete" doc:id="0539d2e3-bae0-4489-91fd-75b9c4f18e26" config-ref="Database_Config">
+			<db:sql >delete from dbo.member_address
+where member_id = :member_id</db:sql>
+			<db:input-parameters ><![CDATA[#[{'member_id' : attributes.uriParams.ID}]]]></db:input-parameters>
+		</db:delete>
+		<ee:transform doc:name="Transform Message" doc:id="ddd4ecb7-421a-47ec-9b01-54618974e242" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"message":"Delete member address successfully"
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="get_memberaddress_by_id_flow" doc:id="89f72854-2e4f-4c00-98b0-0a12dce75375" >
+		<db:select doc:name="Select" doc:id="b8fc1412-82bc-427d-9c50-16fbfc440830" config-ref="Database_Config">
+			<db:sql >Select * from dbo.member_address where member_id = :member_id</db:sql>
+			<db:input-parameters ><![CDATA[#[{'member_id' : attributes.uriParams.ID}]]]></db:input-parameters>
+		</db:select>
+		<ee:transform doc:name="Transform Message" doc:id="dfecbd33-a024-4d07-be6e-7afa04121c5c" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload map 
+{
+	id : $.MEMBER_ADDRESS_ID,
+	account_id : $.MEMBER_ID,
+	address_id : $.ADDRESS_ID
+
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>

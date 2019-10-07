@@ -1,0 +1,109 @@
+#%RAML 1.0
+version: 1.0
+title: member_contact-api
+types:
+  member_contact: !include member_contact-datatype.raml
+  member_contact_no_id: !include member_contact-no-id-datatype.raml
+
+/member_contact:
+  get:
+    responses:
+        200:
+          body:
+            application/json:
+              type: member_contact[]
+              examples:
+                output: !include examples/member_contact-examples.raml
+        404:
+          body:
+            application/json:
+              example:
+                message: Service not found
+        500:
+          body:
+            application/json:
+              example:
+                message: Internal Server error
+  post:
+    body:
+      application/json:
+        type: member_contact_no_id
+        examples:
+          input:  !include examples/member_contact-no-id-example.raml
+    responses:
+      201:
+        body:
+          application/json:
+            type: member_contact
+            examples:
+              output : !include examples/member_contact-example.raml
+      404:
+          body:
+            application/json:
+              example:
+                message: Service not found
+      500:
+          body:
+            application/json:
+              example:
+                message: Internal Server error
+
+  patch:
+    body:
+      application/json:
+        type: member_contact
+        examples:
+          input:  !include examples/member_contact-example.raml
+    responses:
+      201:
+        body:
+          application/json:
+            type: member_contact
+            examples:
+              output : !include examples/member_contact-example.raml
+      404:
+          body:
+            application/json:
+              example:
+                message: Service not found
+      500:
+          body:
+            application/json:
+              example:
+                message: Internal Server error
+  /{ID}:
+    get:
+      responses:
+        200:
+          body:
+            application/json:
+              type: member_contact
+              examples:
+                output: !include examples/member_contact-example.raml
+        404:
+          body:
+            application/json:
+              example:
+                message: Service not found
+        500:
+          body:
+            application/json:
+              example:
+                message: Internal Server error      
+    delete:
+      responses:
+        201:
+          body:
+            application/json:
+              example:
+                message: member-address deleted successfully
+        404:
+          body:
+            application/json:
+              example:
+                message: Service not found
+        500:
+          body:
+            application/json:
+              example:
+                message: Internal Server error

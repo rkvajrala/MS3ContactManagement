@@ -1,0 +1,109 @@
+#%RAML 1.0
+version: 1.0
+title: member_address-api
+types:
+  member_address: !include member_address-datatype.raml
+  member_address_no_id: !include member_address-no-id-datatype.raml
+
+/member_address:
+  get:
+    responses:
+        200:
+          body:
+            application/json:
+              type: member_address[]
+              examples:
+                output: !include examples/member_address-examples.raml
+        404:
+          body:
+            application/json:
+              example:
+                message: Service not found
+        500:
+          body:
+            application/json:
+              example:
+                message: Internal Server error
+  post:
+    body:
+      application/json:
+        type: member_address_no_id
+        examples:
+          input:  !include examples/member_address-no-id-example.raml
+    responses:
+      201:
+        body:
+          application/json:
+            type: member_address
+            examples:
+              output : !include examples/member_address-example.raml
+      404:
+          body:
+            application/json:
+              example:
+                message: Service not found
+      500:
+          body:
+            application/json:
+              example:
+                message: Internal Server error
+
+  patch:
+    body:
+      application/json:
+        type: member_address
+        examples:
+          input:  !include examples/member_address-example.raml
+    responses:
+      201:
+        body:
+          application/json:
+            type: member_address
+            examples:
+              output : !include examples/member_address-example.raml
+      404:
+          body:
+            application/json:
+              example:
+                message: Service not found
+      500:
+          body:
+            application/json:
+              example:
+                message: Internal Server error
+  /{ID}:
+    get:
+      responses:
+        200:
+          body:
+            application/json:
+              type: member_address
+              examples:
+                output: !include examples/member_address-example.raml
+        404:
+          body:
+            application/json:
+              example:
+                message: Service not found
+        500:
+          body:
+            application/json:
+              example:
+                message: Internal Server error      
+    delete:
+      responses:
+        201:
+          body:
+            application/json:
+              example:
+                message: member-address deleted successfully
+        404:
+          body:
+            application/json:
+              example:
+                message: Service not found
+        500:
+          body:
+            application/json:
+              example:
+                message: Internal Server error
