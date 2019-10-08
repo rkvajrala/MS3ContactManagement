@@ -26,7 +26,7 @@ output application/json
 	</flow>
 	<flow name="get_membercontact_by_id_flow" doc:id="01daea92-7760-4e69-bc4c-ef81bb7ccc13" >
 		<db:select doc:name="Select" doc:id="04b2502d-9327-4baa-8046-0efebbfd3c49" config-ref="Database_Config">
-			<db:sql >Select * from member_contact where member_id =:member_id</db:sql>
+			<db:sql >Select * from member_contact where member_id  = :member_id</db:sql>
 			<db:input-parameters ><![CDATA[#[{'member_id' : attributes.uriParams.ID}]]]></db:input-parameters>
 		</db:select>
 		<ee:transform doc:name="Transform Message" doc:id="cf168307-5127-4d8b-bb0b-3be30c478ff1" >

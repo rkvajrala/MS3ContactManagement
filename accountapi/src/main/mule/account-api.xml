@@ -157,15 +157,6 @@ output application/json
 		<flow-ref doc:name="Flow Reference" doc:id="eb4ffa77-92ce-45c3-afd2-b9c10d19b195" name="account_information_flow"/>
     </flow>
     <flow name="post:\account:account-api-config">
-        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{
-  message: "Service not found"
-}]]></ee:set-payload>
-            </ee:message>
-        </ee:transform>
+		<flow-ref doc:name="Flow Reference" doc:id="7a29e47c-2447-41ec-9062-befa475a6b8e" name="post_account_flow"/>
     </flow>
 </mule>
