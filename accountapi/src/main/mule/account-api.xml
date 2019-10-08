@@ -139,16 +139,7 @@ output application/json
         </ee:transform>
     </flow>
     <flow name="patch:\account:account-api-config">
-        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{
-  message: "Service not found"
-}]]></ee:set-payload>
-            </ee:message>
-        </ee:transform>
+		<flow-ref doc:name="Flow Reference" doc:id="d45b1a20-20b4-43e8-ad91-3e2a25958e5e" name="pathc_account_flow"/>
     </flow>
     <flow name="get:\account:account-api-config">
         <logger level="INFO" message="get:\account:account-api-config" />
