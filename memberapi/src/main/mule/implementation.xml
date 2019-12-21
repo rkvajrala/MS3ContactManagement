@@ -11,7 +11,7 @@ http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/cu
 			<db:sql >INSERT INTO [dbo].[MEMBER](FIRST_NAME,Last_Name,DOB,GENDER,TITLE)VALUES(:fname,:lname,:dob,:gender,:role)</db:sql>
 			<db:input-parameters ><![CDATA[#[{'fname':payload.first_name,'lname':payload.last_name,'dob':payload.date_birth,'gender':payload.gender,'role':payload.role}]]]></db:input-parameters>
 		</db:insert>
-		<ee:transform doc:name="Transform Message" doc:id="cc58a63c-bf04-4087-90b0-86926570e1a4" >
+		<ee:transform doc:name="Transform Message1" doc:id="cc58a63c-bf04-4087-90b0-86926570e1a4" >
 			<ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0
 output application/json
