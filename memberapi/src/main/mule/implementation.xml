@@ -5,9 +5,7 @@
 	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
 http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd">
-	<db:config name="Database_Config" doc:name="Database Config" doc:id="15417f09-e9b8-40de-b01e-80f0d2e32207" >
-		<db:mssql-connection host="DESKTOP-BSJOOPT" user="sa" password="Anirudh16" databaseName="ContactsDB" />
-	</db:config>
+	
 	<flow name="post_implementation_flow" doc:id="0b941160-5098-4e3e-8295-300d297e7c4a" >
 		<db:insert doc:name="Insert" doc:id="9a3f06a8-7192-4409-8fb8-eba62b5dc815" config-ref="Database_Config" autoGenerateKeys="true" target="result" targetValue="#[message]">
 			<db:sql >INSERT INTO [dbo].[MEMBER](FIRST_NAME,Last_Name,DOB,GENDER,TITLE)VALUES(:fname,:lname,:dob,:gender,:role)</db:sql>
