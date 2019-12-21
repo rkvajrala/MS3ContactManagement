@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<flow name="patch_accountFlow" doc:id="11c70611-fed8-4a7f-a981-8d2b9dab3686" >
+		<http:listener doc:name="Listener" doc:id="4a10520f-f5a0-43d6-8184-f073a8289a71" config-ref="HTTP_Listener_config" path="/processaccount" allowedMethods="PATCH"/>
+		<flow-ref doc:name="update member" doc:id="2c76ab26-3dd7-41c9-b9fe-4c3c11b20873" name="patch_update_member" />
+		<scatter-gather doc:name="Scatter-Gather" doc:id="a33a7e21-65a5-447e-8a6c-6cc53554db31" >
+			<route >
+				<logger level="INFO" doc:name="Logger" doc:id="794ed0a2-c45d-4240-937d-5af0b2adb026" message="#[payload]"/>
+				<flow-ref doc:name="update address" doc:id="32443c7f-485d-4b8f-a495-47f20bd5234d" name="patch_update_address" />
+			</route>
+			<route >
+				<logger level="INFO" doc:name="Logger" doc:id="58175a3e-0cbb-4d34-8812-0b99880f5383" message="#[payload]"/>
+				<flow-ref doc:name="update contact" doc:id="6ffc3577-3ccf-4b62-b979-ef2630ae2d09" name="patch_update_contact"/>
+			</route>
+		</scatter-gather>
+		<set-payload value='#["Account updated successfully"]' doc:name="Set Payload" doc:id="0b7ee8c4-5088-4294-a97c-4e298c5f9be4" />
+	</flow>
+	<flow name="patch_update_member" doc:id="59737ded-a600-4913-be53-a9b83b3775bc" >
+		<http:request method="PATCH" doc:name="Request" doc:id="928b358c-d377-4255-8b99-fa0c49f04758" config-ref="Member_HTTP_Request_configuration" path="/api/member" target="result">
+			<http:body ><![CDATA[#[payload.'Identification']]]></http:body>
+		</http:request>
+	</flow>
+	<flow name="patch_update_address" doc:id="f36a0aa0-f982-4466-9f9e-3ee284f1de37" >
+		<http:request method="PATCH" doc:name="Request" doc:id="eb3dc06b-f395-4211-879e-f15b28e00ccd" config-ref="Address_HTTP_Request_configuration" path="/api/address" target="result">
+			<http:body ><![CDATA[#[payload.'Address']]]></http:body>
+		</http:request>
+	</flow>
+		<flow name="patch_update_contact" doc:id="56ca877a-cd3f-4d61-a615-7b6d636d343a" >
+		<logger level="INFO" doc:name="Logger" doc:id="9c9f8748-c216-4d14-be96-2c345066f36b" message="#[payload]" />
+		<set-variable value="#[payload.Contact]" doc:name="Set Variable" doc:id="ccf9d9b1-b948-4d2e-91d3-cd9149c951dd" variableName="var_contactList"/>
+		<ee:transform doc:name="Transform Message" doc:id="641badc3-9451-4841-a714-7b05c3c91599" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+vars.var_contactList]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<foreach doc:name="For Each" doc:id="2bff3c15-a501-4038-a13c-1aa39d4d04cf" >
+			<ee:transform doc:name="Transform Message" doc:id="dc7130f4-a320-448f-b4d2-963fa2e6e20a" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+				</ee:message>
+			</ee:transform>
+			<http:request method="PATCH" doc:name="Request" doc:id="4dba7a56-55e0-4df1-98eb-f462f4d455bf" config-ref="Contact_HTTP_Request_configuration" path="/api/contact" outputMimeType="application/json" target="result">
+		</http:request>
+		</foreach>
+	</flow>
+
+</mule>

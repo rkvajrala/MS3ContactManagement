@@ -30,7 +30,7 @@ payload map {
 	</flow>
 	<flow name="get_contacts_by_id_flow" doc:id="1b672f44-63e0-4b85-bf1a-d6a120ec17bb" >
 		<db:select doc:name="Select" doc:id="9078792f-873f-4820-abc6-b408502363df" config-ref="Database_Config">
-			<db:sql >select * from dbo.contact where contact_id =:ID</db:sql>
+			<db:sql >select * from dbo.contact where contact_id = :ID</db:sql>
 			<db:input-parameters ><![CDATA[#[{'ID' : attributes.uriParams.ID}]]]></db:input-parameters>
 		</db:select>
 		<ee:transform doc:name="Transform Message" doc:id="12e022d9-8dfc-45e9-85df-d22e5cd9a24d" >

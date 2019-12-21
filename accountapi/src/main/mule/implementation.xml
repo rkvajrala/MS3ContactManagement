@@ -5,18 +5,25 @@
 	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
 http://www.mulesoft.org/schema/mule/wsc http://www.mulesoft.org/schema/mule/wsc/current/mule-wsc.xsd">
-	<http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="a6e59261-1d2c-4d4f-871b-dead2f026f82" basePath="/processaccount" >
+	<http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="a6e59261-1d2c-4d4f-871b-dead2f026f82">
 		<http:request-connection host="localhost" port="8093" />
 	</http:request-config>
 	<flow name="account_information_flow" doc:id="61d3b192-9f4c-4e8c-9e35-6ac33b26dd30" >
 		<set-variable value="#[attributes.uriParams.ID]" doc:name="Set member id" doc:id="2a8ddbfa-b583-4ea8-9882-a898cec92944" variableName="member_id"/>
 		<logger level="INFO" doc:name="Logger" doc:id="bcebd001-4591-4c9a-9cd4-9dfb82adeaa4" message="#[vars.member_id]"/>
-		<http:request method="GET" doc:name="Request" doc:id="345d67e1-1dc5-418b-8288-9a94dce5cd97" config-ref="HTTP_Request_configuration" path="/{member_id}">
+		<http:request method="GET" doc:name="Request" doc:id="345d67e1-1dc5-418b-8288-9a94dce5cd97" config-ref="HTTP_Request_configuration" path="/processaccount/{member_id}">
 			<http:uri-params ><![CDATA[#[output application/java
 ---
 {
 	"member_id" : vars.member_id
 }]]]></http:uri-params>
 		</http:request>
+	</flow>
+	<flow name="post_account_flow" doc:id="7087441e-d31a-44ae-a409-51dba6504771" >
+		<logger level="INFO" doc:name="Logger" doc:id="0ed60e96-ef7e-4e35-8d27-259007cb8a4f" message="#[payload]"/>
+		<http:request method="POST" doc:name="Request" doc:id="b14867f8-69fb-4dc9-b44c-0927a476ce68" config-ref="HTTP_Request_configuration" path="/processaccount"/>
+	</flow>
+	<flow name="pathc_account_flow" doc:id="8f8971d0-edb8-48d0-b1d1-695af6486b5d" >
+		<http:request method="PATCH" doc:name="Request" doc:id="d9f09db4-7d8c-46d4-ad0f-3d61ff4edb8e" config-ref="HTTP_Request_configuration" path="/processaccount"/>
 	</flow>
 </mule>

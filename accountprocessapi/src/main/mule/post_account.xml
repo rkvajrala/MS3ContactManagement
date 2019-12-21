@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="post_accountFlow" doc:id="f93f3fac-4bfe-43f7-9fc4-2360ab51f797" >
+		<http:listener doc:name="Listener" doc:id="0a3f235d-61ee-4615-90c8-e0d9dbbc1a35" config-ref="HTTP_Listener_config" path="/processaccount" allowedMethods="POST"/>
+		<flow-ref doc:name="create member" doc:id="5d95ee47-d824-4426-9c53-7944458e53fe" name="post_create_member" />
+		<scatter-gather doc:name="Scatter-Gather" doc:id="edc442b6-aac9-4cf7-885b-9fdaf7acc903" >
+			<route >
+				<logger level="INFO" doc:name="Logger" doc:id="19218fdc-a0a5-4ce6-bed5-c1f11782ff7d" message="#[payload]"/>
+				<flow-ref doc:name="create address" doc:id="f706ada3-72c7-4903-86a6-3a5351d731fe" name="post_create_address" />
+			</route>
+			<route >
+				<logger level="INFO" doc:name="Logger" doc:id="f0acb9f9-eb9e-413c-b40f-9696d5794e9e" message="#[payload]"/>
+				<flow-ref doc:name="create contact" doc:id="d6cd30e7-fae0-42ea-a46b-bb3a1c1eb532" name="post_create_contact"/>
+			</route>
+		</scatter-gather>
+		<set-payload value='#["Account created successfully:" ++ vars.member_id]' doc:name="Set Payload" doc:id="1ddb7585-7d32-4224-9c44-6099cac39fb9" />
+	</flow>
+	<flow name="post_create_member" doc:id="cf839b92-97e8-4a9c-b680-467f2d06d4ab" >
+		<http:request method="POST" doc:name="Request" doc:id="52506bb3-b19f-4733-a54b-9df2cebaa167" config-ref="Member_HTTP_Request_configuration" path="/api/member" target="result">
+			<http:body ><![CDATA[#[payload.'Identification']]]></http:body>
+		</http:request>
+		<set-variable value="#[vars.result.'id']" doc:name="Set Variable" doc:id="7c8c6ccc-b66f-4333-87de-b43bef175979" variableName="member_id"/>
+	</flow>
+	<flow name="post_create_address" doc:id="5b89fa3f-f0c7-4ef3-a59e-2d3c3b872578" >
+		<http:request method="POST" doc:name="Request" doc:id="ab0bb2b6-b577-403c-9787-e318abec28a6" config-ref="Address_HTTP_Request_configuration" path="/api/address" target="result">
+			<http:body ><![CDATA[#[payload.'Address']]]></http:body>
+		</http:request>
+		<set-variable value="#[vars.result.id]" doc:name="Set Variable" doc:id="86681c4a-c483-4694-8126-cb5af7644d4b" variableName="address_id"/>
+		<ee:transform doc:name="Transform Message" doc:id="fb9f0093-d9d3-4ea5-8560-ea470b6fc3e4">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+	account_id : vars.member_id,
+	address_id: vars.address_id
+}
+]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="89a3048e-5b62-4b9d-a26c-80b0bbb333cb" message="#[payload]"/>
+		<http:request method="POST" doc:name="Request" doc:id="31beeedd-d736-4a12-9917-302b460bec8b" config-ref="MemberAddress_HTTP_Request_configuration" path="/api/member_address" target="result1"/>
+		<logger level="INFO" doc:name="Logger" doc:id="3fbf451b-c5a7-4fba-9395-34508ecda64e" message="#[vars.result1]"/>
+	</flow>
+	<flow name="post_create_contact" doc:id="be64ecba-4a50-4d23-b470-3abc382b9597" >
+		<logger level="INFO" doc:name="Logger" doc:id="7d291ad0-9677-4077-aadd-205a8bcf5292" message="#[payload]" />
+		<set-variable value="#[payload.Contact]" doc:name="Set Variable" doc:id="e6a84f96-c791-485c-81d8-941d54f39494" variableName="var_contactList"/>
+		<ee:transform doc:name="Transform Message" doc:id="65bea4e9-bec3-4b96-9af2-0ce7c18fa5e8" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+vars.var_contactList]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<foreach doc:name="For Each" doc:id="68495320-0aa5-49fa-86de-9082db486d6c" >
+			<ee:transform doc:name="Transform Message" doc:id="13b312ff-b7e5-4e37-b9c9-f2ab1c6d6b90" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+				</ee:message>
+			</ee:transform>
+			<http:request method="POST" doc:name="Request" doc:id="533f7610-3ed4-4181-9ad5-a6b79fff1c4b" config-ref="Contact_HTTP_Request_configuration" path="/api/contact" outputMimeType="application/json" target="result">
+		</http:request>
+			<set-variable value="#[vars.result.id]" doc:name="Set Variable" doc:id="ef157586-3a88-475e-97c2-1bb4d3ef2a3e" variableName="contact_id"/>
+			<ee:transform doc:name="Transform Message" doc:id="73fdd312-b1eb-435f-9b0f-6093e14deced">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+	account_id : vars.member_id,
+	contact_id: vars.contact_id
+}
+]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+			<http:request method="POST" doc:name="Request" doc:id="ff95e4d7-ba18-42d3-9be5-b39d284979b9" config-ref="member_contact_HTTP_Request_configuration" path="/api/member_contact" outputMimeType="application/json"/>
+		</foreach>
+		<set-payload value="Account created successfully" doc:name="Set Payload" doc:id="9dce86e4-3dd6-43a4-9db9-b1ce6009a840" />
+	</flow>
+</mule>
