@@ -44,7 +44,7 @@
       					<workerType>Micro</workerType>
       					<workers>1</workers>
       					<uri>https://anypoint.mulesoft.com</uri>
-      					<applicationName>a2a-memberapi</applicationName>
+      					<applicationName>2a-memberapi</applicationName>
       					 <properties>
         					<env>dev</env>
       					 </properties>
