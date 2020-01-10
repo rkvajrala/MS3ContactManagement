@@ -15,5 +15,6 @@ http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/m
 		<db:mssql-connection host="${db.host}" user="${db.user}" password="${db.password}" databaseName="${db.database}" />
 	</db:config>
 	<configuration-properties doc:name="Configuration properties" doc:id="ebf755e6-1d53-41a9-96b7-f2305fe0f20a" file="${env}.config.yaml" />
+	<api-gateway:autodiscovery apiId="15951281" doc:name="API Autodiscovery" doc:id="ab26a9d7-9a9d-4912-9111-59861d6c4bed" flowRef="member-api-main" />
 
 </mule>
