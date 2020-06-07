@@ -1,6 +1,7 @@
 USE [master]
+
 GO
-/****** Object:  Database [ContactsDB]    Script Date: 10/8/2019 1:06:29 PM ******/
+/****** Object:  Database [ContactsDB] BRANCH TESTING   Script Date: 10/8/2019 1:06:29 PM ******/
 CREATE DATABASE [ContactsDB]
  CONTAINMENT = NONE
  ON  PRIMARY 
